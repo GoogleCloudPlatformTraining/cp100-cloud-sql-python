@@ -15,7 +15,7 @@ def main_page():
     db = MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
     cursor = db.cursor()
     if request.method == 'POST':
-        cursor.execute('INSERT INTO entries (entry) VALUES %s', (request.form['entry'],))
+        cursor.execute('INSERT INTO entries (entry) VALUES (%s)', (request.form['entry'],))
         db.commit()
         db.close()
         return redirect(url_for('main_page'))
