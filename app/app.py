@@ -15,13 +15,13 @@ def main_page():
     db = MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
     cursor = db.cursor()
     if request.method == 'POST':
-        cursor.execute('INSERT INTO entries (entry) VALUES( ? )', [request.form['entry'],])
+        cursor.execute('INSERT INTO entries (entry) VALUES %s', (request.form['entry'],))
         db.commit()
         db.close()
         return redirect(url_for('main_page'))
     else:
         cursor.execute('SELECT * FROM entries')
-        entries = [dict(entry=row[1]) for row in cursor.fetchall()]
+        entries = [row[1] for row in cursor.fetchall()]
         db.close()
         return render_template('main.html', entries=entries)
 
