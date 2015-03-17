@@ -14,16 +14,14 @@ PASSWORD = os.environ['CLOUDSQL_PWD'] # or os.environ.get('')
 def main_page():
     db=MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
     cursor = db.cursor()
+    print request.form['entry']
     if request.method == 'POST':
         cursor.execute('INSERT INTO entries (entry) VALUES( %s )', (request.form['entry'],))
         db.close()
         return redirect(url_for('main_page'))
     else:
         cursor.execute('SELECT * FROM entries')
-
-        entries = []
-        for row in cursor.fetchall():
-            entries.append(cgi.escape(row[0]))
+        entries = [dict(entry=cgi.escape(row[0]) for row in cursor.fetchall()]
         db.close()
         return render_template('main.html', entries=entries)
 
