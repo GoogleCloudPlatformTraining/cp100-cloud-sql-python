@@ -20,13 +20,9 @@ def main_page():
         cursor = db.cursor()
         cursor.execute('SELECT * FROM entries')
 
-        entries = [];
+        entries = []
         for row in cursor.fetchall():
-            entries.append(dict(('entry',cgi.escape(row[0]))))
-
-        variables = {'entries': entries}
-        template = JINJA_ENVIRONMENT.get_template('main.html')
-        self.response.write(template.render(variables))
+            entries.append(cgi.escape(row[0]))
         db.close()
         return render_template('main.html', entries=entries)
 
