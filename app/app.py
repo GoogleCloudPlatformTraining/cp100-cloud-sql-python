@@ -16,12 +16,13 @@ def main_page():
     cursor = db.cursor()
     print request.form['entry']
     if request.method == 'POST':
-        cursor.execute('INSERT INTO entries (entry) VALUES( %s )', (request.form['entry'],))
+        cursor.execute('INSERT INTO entries (entry) VALUES( ? )', [request.form['entry'],])
+        db.commit()
         db.close()
         return redirect(url_for('main_page'))
     else:
         cursor.execute('SELECT * FROM entries')
-        entries = [dict(entry=cgi.escape(row[0])) for row in cursor.fetchall()]
+        entries = [dict(entry=row[0]) for row in cursor.fetchall()]
         db.close()
         return render_template('main.html', entries=entries)
 
