@@ -21,7 +21,7 @@ def main_page():
         return redirect(url_for('main_page'))
     else:
         cursor.execute('SELECT * FROM entries')
-        entries = [dict(entry=cgi.escape(row[0]) for row in cursor.fetchall()]
+        entries = [dict(entry=cgi.escape(row[0])) for row in cursor.fetchall()]
         db.close()
         return render_template('main.html', entries=entries)
 
