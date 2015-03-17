@@ -14,7 +14,6 @@ PASSWORD = os.environ['CLOUDSQL_PWD'] # or os.environ.get('')
 def main_page():
     db=MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
     cursor = db.cursor()
-    print request.form['entry']
     if request.method == 'POST':
         cursor.execute('INSERT INTO entries (entry) VALUES( ? )', [request.form['entry'],])
         db.commit()
