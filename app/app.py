@@ -12,12 +12,13 @@ PASSWORD = os.environ['CLOUDSQL_PWD'] # or os.environ.get('')
 
 @app.route('/', methods=['GET', 'POST'])
 def main_page():
+    db=MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
+    cursor = db.cursor()
     if request.method == 'POST':
-
+        cursor.execute('INSERT INTO entries (entry) VALUES( %s )', (request.form['entry'],))
+        db.close()
         return redirect(url_for('main_page'))
     else:
-        db=MySQLdb.connect(host=IP_ADDRESS, port=3306, db='guestbook', user='root', passwd=PASSWORD)
-        cursor = db.cursor()
         cursor.execute('SELECT * FROM entries')
 
         entries = []
